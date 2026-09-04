@@ -160,20 +160,6 @@ The watcher uses directory events on the Desktop. The watcher does not use per-f
 - The tool does not set custom icons.
 - The tool does not use hex colors.
 
-## Build from source
-
-Use this procedure only when you change the code.
-
-1. Install Xcode Command Line Tools.
-2. Go to the project folder.
-3. Run this command:
-
-```
-npm run build
-```
-
-The command writes a native binary for this computer.
-
 ## License
 
 MIT. See `LICENSE`.

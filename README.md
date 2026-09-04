@@ -1,8 +1,8 @@
 # foldtint
 
-foldtint is a command-line tool for macOS.
+foldtint applies color to locked folders on the Desktop to differentiate them from unlocked ones on MacOS. Unlocked folders keep the default macOS folder color.
 
-The tool puts one Finder color tag on locked folders on the Desktop. The color identifies locked folders. Unlocked folders keep the default macOS folder color.
+If daemon/watcher is on, the color changes happen automatically. Persists after shutdown/restart.
 
 The tool watches `~/Desktop` only. The tool does not change nested folders. The tool does not change files, aliases, apps, or packages.
 
@@ -166,22 +166,6 @@ The watcher uses directory events on the Desktop. The watcher does not use per-f
 - The tool does not use `/`, `/System`, or `/Applications`.
 - The tool does not set custom icons.
 - The tool does not use hex colors.
-
-## Tests and quality
-
-Run the tests:
-
-```
-swift test
-```
-
-Run the quality checks:
-
-```
-make quality
-```
-
-The quality command checks tests, coverage, lint, complexity, and mutations.
 
 ## License
 

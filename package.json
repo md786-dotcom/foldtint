@@ -1,0 +1,54 @@
+{
+  "name": "foldtint",
+  "version": "1.0.0",
+  "description": "Tint locked top-level Desktop folders on macOS.",
+  "license": "MIT",
+  "author": "Md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/md786-dotcom/foldtint.git"
+  },
+  "homepage": "https://github.com/md786-dotcom/foldtint",
+  "bugs": {
+    "url": "https://github.com/md786-dotcom/foldtint/issues"
+  },
+  "bin": {
+    "foldtint": "bin/foldtint.js"
+  },
+  "files": [
+    "bin/",
+    "Scripts/install.js",
+    "prebuilds/",
+    "Sources/",
+    "Package.swift",
+    "Package.resolved",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "postinstall": "node Scripts/install.js",
+    "prepublishOnly": "node Scripts/build-prebuild.js",
+    "build": "node Scripts/build-prebuild.js"
+  },
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64",
+    "x64"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "macos",
+    "finder",
+    "desktop",
+    "folder",
+    "tag",
+    "cli"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

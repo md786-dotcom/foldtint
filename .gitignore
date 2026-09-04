@@ -12,3 +12,6 @@ muter_tmp/
 *.o
 *.swiftdeps
 *.swiftdeps~
+node_modules/
+vendor/
+prebuilds/

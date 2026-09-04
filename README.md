@@ -11,49 +11,35 @@ Default color: purple.
 ## Requirements
 
 - macOS 14 or later
-- Swift 6
-- Xcode Command Line Tools
+- Node.js 18 or later
+- npm
 
-The tool does not need network access. The tool does not need root access.
+The install procedure puts a native binary on the computer. The tool does not need network access after install. The tool does not need root access.
 
-## Build
+## Install
 
 1. Open a terminal.
-2. Go to the project folder.
-3. Run this command:
-
-```
-swift build -c release
-```
-
-The binary is `.build/release/foldtint`.
-
-Alternative command:
-
-```
-make release
-```
-
-## Install the watcher
-
-The watcher must run as a LaunchAgent. Use the release binary for this procedure.
-
-1. Build the release binary.
 2. Run this command:
 
 ```
-.build/release/foldtint on
+npm install -g foldtint
 ```
 
-The LaunchAgent uses the path of that binary. Keep the binary at that path.
+3. Start the watcher:
 
-## Commands
+```
+foldtint on
+```
 
-Show this help:
+The `on` command installs a LaunchAgent. The LaunchAgent uses the installed `foldtint` binary. Keep the npm global install in place while the watcher runs.
+
+Show help:
 
 ```
 foldtint --help
 ```
+
+## Commands
 
 ### color
 
@@ -91,7 +77,7 @@ Apply or remove the `Locked` tag on top-level Desktop folders now:
 foldtint scan
 ```
 
-Use `scan` after a build or after a repair. You do not need `scan` when the watcher is on.
+Use `scan` after a repair. You do not need `scan` when the watcher is on.
 
 ### on
 
@@ -133,20 +119,21 @@ The `on` command starts this process through LaunchAgent. Do not run `daemon` by
 
 ### uninstall
 
-Do this procedure to remove foldtint data:
+Remove foldtint data, then remove the npm package.
+
+1. Run this command:
 
 ```
 foldtint uninstall
 ```
 
-The command does this work:
+The command stops the watcher. The command removes the LaunchAgent. The command removes the `Locked` tag from top-level Desktop folders. The command deletes the configuration file. The command does not unlock folders.
 
-1. Stop the watcher.
-2. Remove the LaunchAgent.
-3. Remove the `Locked` tag from top-level Desktop folders.
-4. Delete the configuration file.
+2. Run this command:
 
-The command does not unlock folders. The command does not delete the binary.
+```
+npm uninstall -g foldtint
+```
 
 ## Operation
 
@@ -166,6 +153,20 @@ The watcher uses directory events on the Desktop. The watcher does not use per-f
 - The tool does not use `/`, `/System`, or `/Applications`.
 - The tool does not set custom icons.
 - The tool does not use hex colors.
+
+## Build from source
+
+Use this procedure only when you change the code.
+
+1. Install Xcode Command Line Tools.
+2. Go to the project folder.
+3. Run this command:
+
+```
+npm run build
+```
+
+The command writes a native binary for this computer.
 
 ## License
 

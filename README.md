@@ -1,5 +1,11 @@
 # foldtint
 
+[![npm version](https://img.shields.io/npm/v/foldtint?logo=npm&color=cb3837)](https://www.npmjs.com/package/foldtint)
+[![macOS](https://img.shields.io/badge/macOS-14%2B-000000?logo=apple&logoColor=white)](https://www.apple.com/macos/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
+[![X](https://img.shields.io/badge/X-%40mdafanulh-000000?logo=x&logoColor=white)](https://x.com/mdafanulh)
+
 foldtint applies color to locked folders on the Desktop to differentiate them from unlocked ones on MacOS. Unlocked folders keep the default macOS folder color.
 
 If daemon/watcher is on, the color changes happen automatically. Persists after shutdown/restart.

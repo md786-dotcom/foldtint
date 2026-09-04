@@ -1,12 +1,19 @@
 name: Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to publish"
+        required: true
+        default: "v1.0.0"
   push:
     tags:
       - "v*"
 
 permissions:
   contents: write
+  packages: write
 
 jobs:
   release:
@@ -19,16 +26,36 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@md786-dotcom"
 
       - name: Build native binary
         run: npm run build
+
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            pkg.name = "@md786-dotcom/foldtint";
+            fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+          '
+          npm publish --access public
+          git checkout -- package.json
 
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          gh release create "$GITHUB_REF_NAME" \
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          version="${tag#v}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release ${tag} already exists."
+            exit 0
+          fi
+          gh release create "$tag" \
             --title "foldtint ${version}" \
             --notes "Install from npm:
 

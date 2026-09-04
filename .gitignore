@@ -1,0 +1,14 @@
+.build/
+.swiftpm/
+.DS_Store
+*.xcodeproj
+xcuserdata/
+coverage/
+muter_tmp/
+.muter
+*.jsonl
+*.d
+*.dia
+*.o
+*.swiftdeps
+*.swiftdeps~

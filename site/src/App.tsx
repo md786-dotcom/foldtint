@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type MouseEvent } from "react";
 import {
   COLORS,
   COMMANDS,
@@ -6,12 +6,12 @@ import {
   GITHUB,
   INSTALL,
   LIMITS,
-  LOGO,
   NAV,
   NPM,
   X,
   type ColorName,
 } from "./content";
+import { MARK_HTML } from "./logo-ascii";
 
 const FOLDERS: { name: string; kind: "toggle" | "locked" | "open" }[] = [
   { name: "Archive", kind: "toggle" },
@@ -24,12 +24,59 @@ export function App() {
   const [color, setColor] = useState<ColorName>("purple");
   const [locked, setLocked] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [stuck, setStuck] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const menuBtn = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!copied) return;
     const id = window.setTimeout(() => setCopied(false), 2000);
     return () => window.clearTimeout(id);
   }, [copied]);
+
+  useEffect(() => {
+    const node = sentinelRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      setStuck(!entry.isIntersecting);
+    });
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    menuRef.current?.querySelector("a")?.focus();
+  }, [open]);
+
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 900px)");
+    const onChange = () => {
+      if (wide.matches) setOpen(false);
+    };
+    wide.addEventListener("change", onChange);
+    return () => wide.removeEventListener("change", onChange);
+  }, []);
+
+  function onHeaderKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== "Escape" || !open) return;
+    setOpen(false);
+    menuBtn.current?.focus();
+  }
+
+  function onMenuClick(event: MouseEvent<HTMLElement>) {
+    const link = (event.target as HTMLElement).closest("a");
+    if (!link) return;
+    setOpen(false);
+    const href = link.getAttribute("href") ?? "";
+    if (!href.startsWith("#")) return;
+    const target = document.getElementById(href.slice(1));
+    if (!target) return;
+    target.tabIndex = -1;
+    target.focus({ preventScroll: true });
+  }
 
   async function copyInstall() {
     await navigator.clipboard.writeText(INSTALL);
@@ -41,27 +88,58 @@ export function App() {
       <a className="skip" href="#content">
         Skip to content
       </a>
-      <header>
+      <div className="sentinel" ref={sentinelRef} aria-hidden="true" />
+      <header
+        className={stuck ? "is-stuck" : undefined}
+        data-open={open ? "" : undefined}
+        onKeyDown={onHeaderKeyDown}
+      >
         <div className="wrap bar">
-          <a className="brand" href="#top">
-            <span className="brand-dot" aria-hidden="true" />
+          <a className="brand" href="#top" aria-label="foldtint">
+            <span
+              className="brand-mark"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: MARK_HTML }}
+            />
             foldtint
           </a>
-          <nav aria-label="On this page">
+          <button
+            ref={menuBtn}
+            type="button"
+            className="menu-btn"
+            aria-expanded={open}
+            aria-controls="site-menu"
+            onClick={() => setOpen((value) => !value)}
+          >
+            {open ? "Close" : "Menu"}
+          </button>
+          <nav
+            id="site-menu"
+            ref={menuRef}
+            aria-label="On this page"
+            onClick={onMenuClick}
+          >
             {NAV.map((item) => (
               <a key={item.href} href={item.href}>
                 {item.label}
               </a>
             ))}
+            <a className="nav-github" href={GITHUB}>
+              GitHub
+            </a>
+            <a className="nav-install" href="#install">
+              Install
+            </a>
           </nav>
         </div>
       </header>
       <main id="content">
         <section className="hero" id="top">
           <div className="wrap">
-            <pre className="logo" aria-label="foldtint logo">
-              {LOGO}
-            </pre>
+            <p className="eyebrow">
+              <span className="eyebrow-dot" aria-hidden="true" />
+              macOS CLI · Open source · MIT
+            </p>
             <h1>Tint locked Desktop folders.</h1>
             <p className="lede">
               foldtint applies color to locked folders on the Desktop to
@@ -69,23 +147,44 @@ export function App() {
               keep the default macOS folder color.
             </p>
             <div className="cmdbar">
+              <span className="prompt" aria-hidden="true">
+                $
+              </span>
               <code>{INSTALL}</code>
               <button
                 type="button"
                 data-testid="copy-install"
                 onClick={copyInstall}
                 aria-label="Copy install command"
+                aria-live="polite"
               >
                 {copied ? "Copied" : "Copy"}
               </button>
             </div>
-            <p className="links" aria-live="polite">
-              <a href={GITHUB}>GitHub</a>
-              <a href={NPM}>npm</a>
-              <a href={X}>X (@mdafanulh)</a>
+            <div className="hero-actions">
+              <a className="btn-primary" href={GITHUB}>
+                View on GitHub
+              </a>
+              <a className="btn-ghost" href={NPM}>
+                npm
+              </a>
+            </div>
+            <p className="links">
+              <a href={X}>
+                <svg viewBox="0 0 16 16" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M9.3 6.77 14.7.5h-1.28L8.73 5.95 4.9.5H.5l5.66 8.24L.5 15.5h1.28l4.95-5.76 3.95 5.76h4.4L9.3 6.77zm-1.75 2.04-.57-.82L2.24 1.47h1.96l3.68 5.27.57.82 4.78 6.84h-1.96l-3.9-5.59z"
+                  />
+                </svg>
+                X (@mdafanulh)
+              </a>
             </p>
             <p className="meta">
-              macOS 14 or later. Node.js 18 or later. npm. MIT License.
+              <span>macOS 14 or later</span>
+              <span>Node.js 18 or later</span>
+              <span>npm</span>
+              <span>MIT License</span>
             </p>
           </div>
         </section>

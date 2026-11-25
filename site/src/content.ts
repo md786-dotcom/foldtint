@@ -10,16 +10,6 @@ export const COLORS = [
 
 export type ColorName = (typeof COLORS)[number]["name"];
 
-export const LOGO = [
-  "   _____________________",
-  "  /                    /|",
-  " /                    / |   foldtint",
-  "/____________________/  |",
-  "|                    | /",
-  "|    [ Locked ]      |/",
-  "|____________________|",
-].join("\n");
-
 export const COMMANDS: { cmd: string; text: string }[] = [
   { cmd: "foldtint color", text: "Show the current color." },
   {

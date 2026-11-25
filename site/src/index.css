@@ -15,7 +15,7 @@
 
 html {
   background: #fff;
-  scroll-padding-top: 72px;
+  scroll-padding-top: 56px;
 }
 
 body {
@@ -75,65 +75,178 @@ code {
   background: #fff;
   color: var(--ink);
   padding: 8px 12px;
-  z-index: 5;
+  z-index: 40;
 }
 
 .skip:focus {
   transform: none;
 }
 
+.sentinel {
+  height: 1px;
+  pointer-events: none;
+}
+
 header {
-  border-bottom: 1px solid var(--line);
-  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgb(255 255 255 / 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+}
+
+header.is-stuck {
+  border-bottom-color: var(--line);
+}
+
+header[data-open] {
+  border-bottom-color: transparent;
 }
 
 .bar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px 24px;
-  min-height: 56px;
-  padding-block: 8px;
+  gap: 12px;
+  min-height: 48px;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex: none;
   color: var(--ink);
   text-decoration: none;
   font-weight: 600;
   letter-spacing: -0.03em;
   font-size: 17px;
   min-height: 44px;
+  white-space: nowrap;
 }
 
-.brand-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--tag);
+.brand-mark {
+  display: block;
+  flex: none;
+  margin: 0;
+  color: var(--ink);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 6.5px;
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: 0;
+  font-variant-ligatures: none;
+  white-space: pre;
+  text-rendering: geometricPrecision;
 }
 
-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 16px;
+button.menu-btn {
+  display: none;
 }
 
-nav a {
+#site-menu {
+  display: none;
+}
+
+#site-menu a {
   color: var(--ink);
   text-decoration: none;
-  font-size: 14px;
-  min-height: 44px;
+  white-space: nowrap;
+}
+
+#site-menu a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+#site-menu a.nav-install {
+  color: #fff;
+  background: var(--ink);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 32px;
+  height: 32px;
+  padding: 0 12px;
   display: inline-flex;
   align-items: center;
 }
 
-nav a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+#site-menu a.nav-install:hover {
+  background: #000;
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  #site-menu {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0 13px;
+    margin-left: auto;
+    min-width: 0;
+  }
+
+  #site-menu a {
+    font-size: 14px;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  a.nav-github {
+    margin-left: 6px;
+  }
+
+  #site-menu a.nav-install {
+    margin-left: 2px;
+    min-height: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 899px) {
+  button.menu-btn {
+    display: inline-flex;
+  }
+
+  header[data-open] #site-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    padding: 6px 0 12px;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+
+  header[data-open] #site-menu a {
+    min-height: 44px;
+    padding: 8px var(--gutter);
+    font-size: 16px;
+  }
+
+  header[data-open] #site-menu a:hover {
+    background: #f6f6f7;
+    text-decoration: none;
+  }
+
+  header[data-open] #site-menu a.nav-install {
+    align-self: flex-start;
+    margin: 10px var(--gutter) 2px;
+    min-height: 40px;
+    height: 40px;
+    padding: 0 16px;
+  }
+
+  header[data-open] #site-menu a.nav-install:hover {
+    background: #000;
+  }
 }
 
 h1,
@@ -144,12 +257,12 @@ p {
 }
 
 h1 {
-  margin-top: 28px;
-  font-size: clamp(2.15rem, 4.6vw, 3.35rem);
-  line-height: 1.05;
-  letter-spacing: -0.038em;
+  margin-top: 0;
+  font-size: clamp(2.75rem, 5.6vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
   font-weight: 600;
-  max-width: 14ch;
+  max-width: 17ch;
   text-wrap: balance;
 }
 
@@ -190,44 +303,90 @@ h3 {
 }
 
 .hero {
-  padding-top: 40px;
-  padding-bottom: 64px;
+  position: relative;
+  isolation: isolate;
+  padding-top: clamp(48px, 7vw, 96px);
+  padding-bottom: clamp(56px, 8vw, 112px);
+  background-color: #fff;
 }
 
-.logo {
-  margin: 0;
-  color: var(--ink);
-  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 1.12;
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: #fff;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 50% 0%, rgb(175 82 222 / 0.08), transparent 62%),
+    linear-gradient(rgb(29 29 31 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(29 29 31 / 0.035) 1px, transparent 1px);
+  background-size: auto, 64px 64px, 64px 64px;
+  mask-image: linear-gradient(#000 0%, transparent 78%);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 22px;
+  padding: 6px 12px 6px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
   letter-spacing: 0;
-  font-variant-ligatures: none;
-  white-space: pre;
 }
 
-@media (min-width: 480px) {
-  .logo {
-    font-size: clamp(14px, 1.7vw, 20px);
-  }
+.eyebrow-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--tag);
+  flex: none;
+}
+
+.hero .wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero .lede {
+  margin-top: 20px;
+  max-width: 56ch;
+  line-height: 1.55;
+  text-wrap: pretty;
 }
 
 .cmdbar {
-  margin-top: 28px;
+  margin-top: 32px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  max-width: 520px;
-  border: 1px solid var(--line-strong);
-  border-left: 3px solid var(--tag);
-  border-radius: 10px;
-  padding: 8px 8px 8px 14px;
+  gap: 8px 10px;
+  width: min(100%, 34rem);
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 8px 8px 8px 16px;
   background: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 10px 28px rgb(0 0 0 / 0.05);
+}
+
+.prompt {
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 14px;
+  user-select: none;
 }
 
 .cmdbar code {
-  flex: 1 1 180px;
+  flex: 1 1 160px;
   min-width: 0;
   font-size: 14px;
   overflow-wrap: anywhere;
@@ -245,9 +404,30 @@ button,
   cursor: pointer;
 }
 
+button.menu-btn {
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  flex: none;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  min-height: 36px;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 button:hover,
 .swatch:hover {
   background: #000;
+}
+
+button.menu-btn:hover {
+  background: #fafafa;
 }
 
 button:active,
@@ -256,14 +436,60 @@ button:active,
 }
 
 .cmdbar button {
-  min-width: 5.75rem;
+  min-width: 5.5rem;
+  min-height: 40px;
+  border-radius: 10px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #000;
+}
+
+.btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+
+.btn-ghost:hover {
+  background: #fafafa;
 }
 
 .links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 20px;
-  margin-top: 16px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 2px;
+  margin-top: 22px;
 }
 
 .links a,
@@ -272,18 +498,68 @@ button:active,
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.links a {
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.links a svg {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+.links a + a::before {
+  content: "";
+  width: 3px;
+  height: 3px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  flex: none;
+}
+
+.links a:hover,
+.foot a:hover {
+  color: var(--ink);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .meta {
-  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  max-width: 36rem;
+  margin-top: 12px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
+}
+
+.meta span + span::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  margin: 0 0.55em;
+  border-radius: 50%;
+  background: #6e6e73;
+  vertical-align: 0.15em;
 }
 
 section[id] {
-  scroll-margin-top: 72px;
+  scroll-margin-top: 56px;
+}
+
+section[id]:focus,
+section[id]:focus-visible {
+  outline: none;
 }
 
 section + section {
@@ -664,17 +940,8 @@ footer {
 }
 
 @media (max-width: 700px) {
-  .hero {
-    padding-top: 32px;
-    padding-bottom: 48px;
-  }
-
   section + section {
     padding-top: 48px;
     padding-bottom: 48px;
-  }
-
-  h1 {
-    margin-top: 20px;
   }
 }

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="180" viewBox="0 0 1200 180" role="img" aria-labelledby="title desc">
+  <title id="title">foldtint colors</title>
+  <desc id="desc">The seven Finder tag colors that foldtint accepts: gray, green, purple (default), blue, yellow, red, orange.</desc>
+
+  <rect x="0.5" y="0.5" width="1199" height="179" rx="24" fill="#ffffff" stroke="#e4e4e7"/>
+
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#1d1d1f" text-anchor="middle">
+    <g transform="translate(140 0)"><circle cx="0" cy="72" r="24" fill="#8E8E93"/><text y="130">gray</text></g>
+    <g transform="translate(293 0)"><circle cx="0" cy="72" r="24" fill="#34C759"/><text y="130">green</text></g>
+    <g transform="translate(446 0)">
+      <circle cx="0" cy="72" r="31" fill="none" stroke="#AF52DE" stroke-width="2"/>
+      <circle cx="0" cy="72" r="24" fill="#AF52DE"/>
+      <text y="130">purple</text>
+      <text y="156" font-size="16" fill="#6e6e73">default</text>
+    </g>
+    <g transform="translate(599 0)"><circle cx="0" cy="72" r="24" fill="#007AFF"/><text y="130">blue</text></g>
+    <g transform="translate(752 0)"><circle cx="0" cy="72" r="24" fill="#FFCC00"/><text y="130">yellow</text></g>
+    <g transform="translate(905 0)"><circle cx="0" cy="72" r="24" fill="#FF3B30"/><text y="130">red</text></g>
+    <g transform="translate(1058 0)"><circle cx="0" cy="72" r="24" fill="#FF9500"/><text y="130">orange</text></g>
+  </g>
+</svg>

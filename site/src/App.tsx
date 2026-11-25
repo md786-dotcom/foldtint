@@ -26,6 +26,7 @@ export function App() {
   const [copied, setCopied] = useState(false);
   const [open, setOpen] = useState(false);
   const [stuck, setStuck] = useState(false);
+  const [downloads, setDownloads] = useState<number | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const menuBtn = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLElement>(null);
@@ -50,6 +51,17 @@ export function App() {
     if (!open) return;
     menuRef.current?.querySelector("a")?.focus();
   }, [open]);
+
+  useEffect(() => {
+    // shortcut: the npm API caps a range at 18 months, switch to summing yearly ranges after 2028-03.
+    const today = new Date().toISOString().slice(0, 10);
+    fetch(`https://api.npmjs.org/downloads/point/2026-09-04:${today}/foldtint`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (typeof data?.downloads === "number") setDownloads(data.downloads);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 900px)");
@@ -169,6 +181,13 @@ export function App() {
                 npm
               </a>
             </div>
+            <a className="stat-card" href={NPM}>
+              <span className="stat-label">Downloads on npm</span>
+              <span className="stat-value" data-testid="npm-downloads">
+                {downloads === null ? "—" : downloads.toLocaleString("en-US")}
+              </span>
+              <span className="stat-note">Since the first release in September 2026</span>
+            </a>
             <p className="links">
               <a href={X}>
                 <svg viewBox="0 0 16 16" aria-hidden="true">

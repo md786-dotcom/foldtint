@@ -16,7 +16,11 @@ for (const viewport of viewports) {
     test.setTimeout(45000);
     await page.setViewportSize(viewport);
     await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.route("https://api.npmjs.org/downloads/**", (route) =>
+      route.fulfill({ json: { downloads: 1234, package: "foldtint" } }),
+    );
     await page.goto("/");
+    await expect(page.getByTestId("npm-downloads")).toHaveText("1,234");
 
     const menuButton = page.getByRole("button", { name: /^(Menu|Close)$/ });
     const mobile = viewport.width < 900;
